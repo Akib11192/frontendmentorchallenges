@@ -20,7 +20,7 @@ getLocation();
 
 function renderWeather(exectLocation) {
   // console.log(exectLocation);
-  const url = `http://api.weatherapi.com/v1/current.json?key=562894dc23ab465b88a152717251912&q=${exectLocation}&aqi=no`;
+  const url = `https://api.weatherapi.com/v1/current.json?key=562894dc23ab465b88a152717251912&q=${exectLocation}&aqi=no`;
   async function getWeather() {
     const response = await fetch(url);
     const data = await response.json();
