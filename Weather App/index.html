@@ -23,62 +23,76 @@
     </header>
 
 
-    <main class="">
+    <main>
         <div class="max-w-6xl m-auto flex flex-col gap-15">
             <h2 class="text-6xl md:text-4xl font-bold text-(--neutral-0) text-center tracking-[5px] ">How's the sky
                 looking
                 today
             </h2>
-            <div class="mx-2">
+            <div class="mx-4">
                 <div class="flex flex-col md:flex-row justify-center gap-2">
                     <div class="bg-(--neutral-600) flex justify-start items-center rounded gap-2 md:px-2 p-2 md:w-2/4">
                         <i class="fa-solid fa-magnifying-glass text-(--neutral-0)"></i>
                         <input id="search-box" type="text" placeholder="Search for a place..."
-                            class="text-(--neutral-0) outline-0">
+                            class="bg-(--neutral-600) appearance-none outline-none text-(--neutral-0) placeholder:text-gray-400  w-full" />
                     </div>
                     <button id="search-btn"
                         class="text-xl text-(--neutral-0) bg-(--blue-500) rounded md:px-5 p-2">Search</button>
                 </div>
             </div>
 
-            <div class="">
-                <div class="flex flex-col gap-6">
-                    <div class="img-today flex flex-row items-center justify-between md:w-7/10 h-60 rounded-2xl p-6">
+            <div class="flex flex-col lg:flex-row justify-center items-center gap-4 mx-4">
+
+                <div class="flex flex-col  gap-6 lg:w-7/10">
+
+                    <div class="img-today flex flex-row items-center justify-between h-60 rounded-2xl p-6">
                         <!-- <img src="./images/bg-today-large.svg" alt="" class="absolute -z-10"> -->
                         <div class="flex flex-col gap-4">
                             <h2 id="city-country" class="text-2xl font-semibold text-(--neutral-0)">
                             </h2>
-                            <p class=" text-(--neutral-0)">Friday , july 5 , 2025</p>
+                            <p id="today-date" class="text-(--neutral-0)"></p>
                         </div>
-                        <div class="flex flex-row gap-8">
-                            <img src="./images/icon-sunny.webp" alt="" class="w-20 h-20">
-                            <h2 class="text-6xl font-bold text-(--neutral-0)">64<sup>o</sup>
+                        <div class="flex flex-col md:flex-row gap-8">
+                            <img id="day-or-night" alt="" class="w-10 h-10 md:w-20 md:h-20">
+                            <h2 id="temp-today" class="text-4xl md:text-6xl font-bold text-(--neutral-0)">
                             </h2>
                         </div>
                     </div>
 
-                    <div class="md:w-7/10 flex flex-row gap-6">
-                        <div class="bg-(--neutral-600) w-1/4 rounded-2xl p-4 flex flex-col gap-4">
-                            <h4 class="parameter text-(--neutral-300) text-2xl">Feels like</h4>
-                            <p class="value text-(--neutral-0) text-4xl">64<sup>o</sup></p>
+
+
+                    <div class="flex flex-col justify-between gap-4 md:flex-row ">
+                        <div class="flex [@media(max-width:390px)]:flex-col flex-row gap-4 w-full md:w-1/2">
+                            <div
+                                class="bg-(--neutral-600) h-25 rounded-2xl p-4 [@media(max-width:390px)]:w-full w-1/2 ">
+                                <h4 class="parameter1 text-(--neutral-300) text-2xl">Feels like</h4>
+                                <p id="value1" class="value1 text-(--neutral-0) text-4xl"></p>
+                            </div>
+                            <div
+                                class="bg-(--neutral-600) h-25 rounded-2xl p-4 [@media(max-width:390px)]:w-full w-1/2 ">
+                                <h4 class="parameter2 text-(--neutral-300) text-2xl">Humidity</h4>
+                                <p id="value2" class="value2 text-(--neutral-0) text-4xl">46%</p>
+                            </div>
                         </div>
-                        <div class="bg-(--neutral-600) w-1/4 rounded-2xl p-4 flex flex-col gap-4">
-                            <h4 class="parameter text-(--neutral-300) text-2xl">Humidity</h4>
-                            <p class="value text-(--neutral-0) text-4xl">46%</p>
-                        </div>
-                        <div class="bg-(--neutral-600) w-1/4 rounded-2xl p-4 flex flex-col gap-4">
-                            <h4 class="parameter text-(--neutral-300) text-2xl">Wind</h4>
-                            <p class="value text-(--neutral-0) text-4xl">9 mph</p>
-                        </div>
-                        <div class="bg-(--neutral-600) w-1/4 rounded-2xl p-4 flex flex-col gap-4">
-                            <h4 class="parameter text-(--neutral-300) text-2xl">Precipitation</h4>
-                            <p class="value text-(--neutral-0) text-4xl ">0 in</p>
+                        <div class="flex [@media(max-width:390px)]:flex-col flex-row gap-4 w-full md:w-1/2">
+                            <div
+                                class="bg-(--neutral-600) h-25 rounded-2xl p-4 [@media(max-width:390px)]:w-full w-1/2 ">
+                                <h4 class="parameter3 text-(--neutral-300) text-2xl">Wind</h4>
+                                <p id="value3" class="value3 text-(--neutral-0) text-4xl">9 mph</p>
+                            </div>
+                            <div
+                                class="bg-(--neutral-600) h-25 rounded-2xl p-4 [@media(max-width:390px)]:w-full w-1/2 ">
+                                <h4 class="parameter4 text-(--neutral-300) text-2xl">Precipitation</h4>
+                                <p id="value4" class="value4 text-(--neutral-0) text-4xl ">0 in</p>
+                            </div>
                         </div>
                     </div>
 
+
+
                     <div class="forecast flex flex-col gap-4 ">
                         <h2 class="text-2xl text-(--neutral-0)">Daily forecast</h2>
-                        <div class="days md:w-7/10 flex md:flex-row justify-between gap-4  ">
+                        <div id="forecast-days" class="days flex flex-row w-full flex-wrap gap-4 ">
                             <div class="tue px-2 py-4 bg-(--neutral-600) rounded-2xl flex flex-col items-center ">
                                 <h4 class="text-(--neutral-0)">Tue</h4>
                                 <img src="./images/icon-rain.webp" alt="" class="w-20 h-20">
@@ -87,6 +101,8 @@
                                     <p class="fer text-(--neutral-0)">57<sup>o</sup></p>
                                 </div>
                             </div>
+
+
                             <div class="wed px-2 py-4 bg-(--neutral-600) rounded-2xl flex flex-col items-center">
                                 <h4 class="text-(--neutral-0)">Wed</h4>
                                 <img src="./images/icon-drizzle.webp" alt="" class="w-20 h-20">
@@ -140,12 +156,15 @@
 
                 </div>
 
-                <div>
-
+                <div class="bg-(--neutral-600) md:w-3/10 rounded-2xl">
+                    akib
                 </div>
+
+
             </div>
 
         </div>
+
     </main>
 </body>
 
