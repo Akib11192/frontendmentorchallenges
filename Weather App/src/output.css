@@ -175,14 +175,8 @@
   }
 }
 @layer utilities {
-  .absolute {
-    position: absolute;
-  }
   .static {
     position: static;
-  }
-  .-z-10 {
-    z-index: calc(10 * -1);
   }
   .m-auto {
     margin: auto;
@@ -202,6 +196,9 @@
   .table {
     display: table;
   }
+  .h-5 {
+    height: calc(var(--spacing) * 5);
+  }
   .h-8 {
     height: calc(var(--spacing) * 8);
   }
@@ -214,11 +211,17 @@
   .h-25 {
     height: calc(var(--spacing) * 25);
   }
+  .h-30 {
+    height: calc(var(--spacing) * 30);
+  }
   .h-60 {
     height: calc(var(--spacing) * 60);
   }
   .w-1\/2 {
     width: calc(1/2 * 100%);
+  }
+  .w-5 {
+    width: calc(var(--spacing) * 5);
   }
   .w-10 {
     width: calc(var(--spacing) * 10);
@@ -329,6 +332,9 @@
     font-size: var(--text-xl);
     line-height: var(--tw-leading, var(--text-xl--line-height));
   }
+  .text-\[12px\] {
+    font-size: 12px;
+  }
   .text-\[16px\] {
     font-size: 16px;
   }
@@ -369,14 +375,16 @@
       color: var(--color-gray-400);
     }
   }
+  .hover\:bg-\(--neutral-600\) {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--neutral-600);
+      }
+    }
+  }
   .md\:h-10 {
     @media (width >= 48rem) {
       height: calc(var(--spacing) * 10);
-    }
-  }
-  .md\:h-20 {
-    @media (width >= 48rem) {
-      height: calc(var(--spacing) * 20);
     }
   }
   .md\:w-1\/2 {
@@ -392,11 +400,6 @@
   .md\:w-3\/10 {
     @media (width >= 48rem) {
       width: calc(3/10 * 100%);
-    }
-  }
-  .md\:w-20 {
-    @media (width >= 48rem) {
-      width: calc(var(--spacing) * 20);
     }
   }
   .md\:w-34 {
@@ -462,19 +465,30 @@ body {
 :root {
   --neutral-900: hsl(243, 96%, 9%);
   --neutral-800: hsl(243, 27%, 20%);
-  --neutral-700: hsl(243, 23%, 24%);
-  --neutral-600: hsl(243, 23%, 30%);
+  --neutral-600: hsl(243, 23%, 24%);
+  --neutral-700: hsl(243, 23%, 35%);
   --neutral-300: hsl(240, 6%, 70%);
   --neutral-200: hsl(250, 6%, 84%);
   --neutral-0: hsl(0, 0%, 100%);
-  --blue-700: hsl(248, 70%, 36%);
-  --blue-500: hsl(233, 67%, 56%);
+  --blue-700: hsl(248, 18%, 82%);
+  --blue-500: hsl(233, 53%, 93%);
 }
 .img-today {
   background-image: url(../images/bg-today-large.svg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+}
+.loading-rotate {
+  animation: rotate 2s infinite ease;
+}
+@keyframes rotate {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
 }
 @property --tw-font-weight {
   syntax: "*";
