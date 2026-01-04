@@ -162,21 +162,48 @@
 
                 <div class="bg-(--neutral-600) md:w-3/10 rounded-2xl p-4 flex flex-col gap-4">
                     <div class="flex flex-row justify-between">
-                        <h3>Hourly Forecast</h3>
-                        <select id="day-names-select" class="p-4 bg-(--neutral-600) rounded-2xl">
+                        <h3 class="text-(--neutral-0) text-center py-2">Hourly Forecast</h3>
 
-                        </select>
+                        <div class="relative">
+                            <button id="dayBtn" class="w-32 h-10 flex justify-between items-center
+           bg-[#2b2e4a] text-white px-2 py-2 rounded-xl">
+                            </button>
+
+                            <ul id="dayMenu" class="hidden absolute mt-2 w-full rounded-xl
+           bg-[#2b2e4a]/95 backdrop-blur-xl
+           border border-white/10 shadow-xl overflow-hidden">
+
+                            </ul>
+                        </div>
+
                     </div>
-                    <div id="hours">
+                    <div id="hours" class="flex md:flex-col gap-4">
+                        <!-- <div
+                            class="bg-(--neutral-700) flex flex-row items-center justify-between w-full px-2 rounded-2xl">
+                            <div class=" flex flex-row items-center justify-between">
+                                <img src="./images/icon-weather/icon-drizzle.webp" alt="" class="w-10 h-10">
+                                <p id="time" class="text-(--neutral-0)">3 pm</p>
+                            </div>
+                            <p id="hour-temp" class="px-2 text-(--neutral-0)">20 deg</p>
+                        </div> -->
+                        <!-- <div
+                            class="bg-(--neutral-700) flex flex-row items-center justify-between w-full px-2 rounded-2xl">
+                            <div class=" flex flex-row items-center justify-between">
+                                <img src="./images/icon-weather/icon-drizzle.webp" alt="" class="w-10 h-10">
+                                <p id="time" class="text-(--neutral-0)">3 pm</p>
+                            </div>
+                            <p id="hour-temp" class="px-2 text-(--neutral-0)">20 deg</p>
+                        </div>
                         <div
                             class="bg-(--neutral-700) flex flex-row items-center justify-between w-full px-2 rounded-2xl">
                             <div class=" flex flex-row items-center justify-between">
                                 <img src="./images/icon-weather/icon-drizzle.webp" alt="" class="w-10 h-10">
-                                <p id="time">3 pm</p>
+                                <p id="time" class="text-(--neutral-0)">3 pm</p>
                             </div>
-                            <p id="hour-temp" class="px-2">20 deg</p>
-                        </div>
+                            <p id="hour-temp" class="px-2 text-(--neutral-0)">20 deg</p>
+                        </div> -->
                     </div>
+
                 </div>
 
 

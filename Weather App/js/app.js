@@ -11,6 +11,9 @@ const dayOrNight = document.querySelector("#day-or-night");
 const dailyForeCast = document.querySelector("#forecast-days");
 const infoBenner = document.querySelector("#info-benner");
 const dayNamesSelect = document.querySelector("#day-names-select");
+const btn = document.getElementById("dayBtn");
+const menu = document.getElementById("dayMenu");
+const hourlyForeCase = document.querySelector("#hours");
 
 // infoBenner.innerHTML = `<div class="flex items-center justify-center bg-(--neutral-600) h-60 rounded-2xl"><img src="./images/icon-ui/icon-loading.svg" alt="" class="loading-rotate w-5 h-5 ">`;
 
@@ -77,6 +80,9 @@ const getLocation = async () => {
   });
 };
 getLocation();
+let globalData;
+
+function hourlyShimmer() {}
 
 async function getWeather(exectLocation) {
   const geoRes = await fetch(
@@ -90,13 +96,15 @@ async function getWeather(exectLocation) {
     `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_max,precipitation_sum,precipitation_hours,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,wind_gusts_10m_max,wind_speed_10m_max,daylight_duration,sunshine_duration,precipitation_probability_max&hourly=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m,apparent_temperature,precipitation_probability&current=wind_gusts_10m,wind_direction_10m,wind_speed_10m,is_day,relative_humidity_2m,apparent_temperature,temperature_2m,precipitation,rain,showers,snowfall,surface_pressure,cloud_cover,pressure_msl,weather_code&timezone=auto`
   );
   const weatherData = await weatherRes.json();
-
+  globalData = weatherData;
   renderWeather(geoData, weatherData);
 }
 const date = new Date();
 const dayName = days[date.getDay()];
 const monthName = months[date.getMonth()];
 const year = date.getFullYear();
+const hourIndex = date.getHours();
+console.log(hourIndex);
 
 function getDaysStartingFromToday(days) {
   const todayIndex = date.getDay();
@@ -105,9 +113,11 @@ function getDaysStartingFromToday(days) {
 }
 
 function renderWeather(geoData, weatherData) {
+  const dayFromToday = getDaysStartingFromToday(days);
   renderToday(geoData, weatherData);
   renderDailyForecast(weatherData);
-  renderHourlyForecast(weatherData);
+  dayMenu(dayFromToday[0]);
+  // renderHourlyForecast(weatherData);
 }
 
 function renderToday(geoData, weatherData) {
@@ -143,9 +153,10 @@ function renderToday(geoData, weatherData) {
 }
 
 function renderDailyForecast(weatherData) {
-  console.log(weatherData.daily);
+  console.log(weatherData);
   dailyForeCast.innerHTML = "";
   const dayFromToday = getDaysStartingFromToday(days);
+  // dayMenu(dayFromToday[0]);
   dayFromToday.forEach((el, index) => {
     let weatherCode;
     if ([0].includes(weatherData.daily.weather_code[index])) {
@@ -183,21 +194,74 @@ function renderDailyForecast(weatherData) {
   });
 }
 
-function renderHourlyForecast(weatherData) {
-  console.log(weatherData);
-  const dayFromToday = getDaysStartingFromToday(days);
-  dayFromToday.forEach((el, index) => {
-    const option = document.createElement("option");
-    option.classList.add(
-      "text-(--neutral-0)",
-      "p-2",
-      "hover:bg-(--neutral-600)"
-    );
-    option.innerText = dayFromToday[index];
-    dayNamesSelect.append(option);
+function renderHourlyForecast(selectedDay, index) {
+  // console.log(selectedDay, index);
+
+  hourlyForeCase.innerHTML = "";
+  globalData.hourly.time
+    .slice(hourIndex + index * 24, hourIndex + index * 24 + 8)
+    .forEach((el, i) => {
+      // console.log(globalData.hourly.time[hourIndex + index * 24 + i]);
+      const hour = document.createElement("div");
+      hour.classList.add(
+        "bg-(--neutral-700)",
+        "flex",
+        "flex-row",
+        "items-center",
+        "justify-between",
+        "w-full",
+        "px-2",
+        "rounded-2xl"
+      );
+      hour.innerHTML = `<div class=" flex flex-row items-center justify-between">
+                                <img src="./images/icon-weather/icon-drizzle.webp" alt="" class="w-10 h-10">
+                                <p id="time" class="text-(--neutral-0)">${
+                                  globalData.hourly.time[
+                                    hourIndex + index * 24 + i
+                                  ]
+                                }</p> 
+                            </div>
+                            <p id="hour-temp" class="px-2 text-(--neutral-0)">${
+                              globalData.hourly.apparent_temperature[
+                                hourIndex + index * 24 + i
+                              ]
+                            } deg</p>`;
+      hourlyForeCase.append(hour);
+    });
+}
+
+function rotateDays(days, selectedDay) {
+  const index = days.indexOf(selectedDay);
+  return {
+    orderedDays: [...days.slice(index), ...days.slice(0, index)],
+    index,
+  };
+}
+
+function dayMenu(selectedDay) {
+  const { orderedDays, index } = rotateDays(days, selectedDay);
+  renderHourlyForecast(orderedDays[0], index);
+  btn.innerHTML = `${orderedDays[0]} <span>▼</span>`;
+  menu.innerHTML = "";
+
+  orderedDays.slice(1).forEach((day) => {
+    const li = document.createElement("li");
+    li.className =
+      "px-4 py-2 hover:bg-white/10 text-(--neutral-0) cursor-pointer";
+    li.textContent = day;
+    menu.appendChild(li);
   });
 }
 
+btn.addEventListener("click", function () {
+  menu.classList.toggle("hidden");
+});
+menu.addEventListener("click", (e) => {
+  if (e.target.tagName !== "LI") return;
+
+  dayMenu(e.target.textContent);
+  menu.classList.add("hidden");
+});
 searchBtn.addEventListener("click", function (e) {
   getWeather(searchBox.value.toLowerCase());
   searchBox.value = "";
