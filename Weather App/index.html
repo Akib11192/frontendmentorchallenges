@@ -11,13 +11,35 @@
 </head>
 
 <body class="bg-(--neutral-900)">
-    <header class="my-4">
-        <div class="max-w-6xl m-auto p-2 flex justify-between ">
+    <header class="my-4 ">
+        <div class="max-w-6xl m-auto p-2 flex justify-between relative">
             <img src="./images/logo.svg" alt="" class="h-8 md:h-10 md:w-34">
-            <div class="flex flex-row items-center px-4 rounded gap-2.5 bg-(--neutral-700) text-white">
+            <div id="units-selection"
+                class="flex flex-row items-center h-10 gap-2.5 px-4 rounded bg-(--neutral-600) text-white">
                 <i class="fa-solid fa-gear "></i>
                 <p class=" font-semibold">Units</p>
                 <i class="fa-solid fa-angle-down"></i>
+            </div>
+            <div id="units-popup"
+                class="absolute top-13 right-5 bg-(--neutral-600) w-50 rounded p-3 text-white cursor-pointer z-10">
+                <h2>Switch to Imperial</h2>
+                <div id="temp-unit-selector">
+                    <h3 class="text-(--neutral-300)">Temperature</h3>
+                    <p id="celcius" class="py-1 px-1 hover:bg-(--neutral-700) rounded">Celcius (C<sup>o</sup>)</p>
+                    <p id="fahrenheit" class="py-1 px-1 hover:bg-(--neutral-700) rounded">Fahrenheit (F<sup>o</sup>)</p>
+                </div>
+                <hr>
+                <div id="wind-unit-selector">
+                    <h3 class="text-(--neutral-300)">Wind Speed</h3>
+                    <p id="k" class="py-1 px-1 hover:bg-(--neutral-700) rounded">km/h</p>
+                    <p id="m" class="py-1 px-1 hover:bg-(--neutral-700) rounded">mp/h</p>
+                </div>
+                <hr>
+                <div id="prec-unit-selector">
+                    <h3 class="text-(--neutral-300)">Precipitation</h3>
+                    <p id="inches" class="py-1 px-1 hover:bg-(--neutral-700) rounded">Inches (In)</p>
+                    <p id="millimeters" class="py-1 px-1 hover:bg-(--neutral-700) rounded">Millimeters (MM)</p>
+                </div>
             </div>
         </div>
     </header>
@@ -41,24 +63,13 @@
                 </div>
             </div>
 
-            <div class="flex flex-col lg:flex-row justify-center items-center gap-4 mx-4">
+            <div class="flex flex-col lg:flex-row justify-center lg:items-start items-center gap-4 mx-4">
 
                 <div class="flex flex-col  gap-6 lg:w-7/10">
 
 
                     <div id="info-benner">
-                        <!-- <div class="img-today flex flex-row items-center justify-between h-60 rounded-2xl p-6">
-                            <div class="flex flex-col gap-4">
-                                <h2 id="city-country" class="text-2xl font-semibold text-(--neutral-0)">
-                                </h2>
-                                <p id="today-date" class="text-(--neutral-0)"></p>
-                            </div>
-                            <div class="flex flex-col md:flex-row gap-8">
-                                <img id="day-or-night" alt="" class="w-20 h-20">
-                                <h2 id="temp-today" class="text-4xl md:text-6xl font-bold text-(--neutral-0)">
-                                </h2>
-                            </div>
-                        </div> -->
+
                     </div>
 
 
@@ -96,64 +107,7 @@
                     <div class="forecast flex flex-col gap-4 ">
                         <h2 class="text-2xl text-(--neutral-0)">Daily forecast</h2>
                         <div id="forecast-days" class="days flex flex-row w-full flex-wrap gap-4 ">
-                            <!-- <div id="" class="px-2 py-4 bg-(--neutral-600) rounded-2xl flex flex-col items-center ">
-                                <h4 class="text-(--neutral-0)">Tue</h4>
-                                <img src="./images/icon-rain.webp" alt="" class="w-20 h-20">
-                                <div class="flex flex-row gap-6">
-                                    <p class="deg text-(--neutral-0)">64<sup>o</sup></p>
-                                    <p class="fer text-(--neutral-0)">57<sup>o</sup></p>
-                                </div>
-                            </div>
 
-
-                            <div class="wed px-2 py-4 bg-(--neutral-600) rounded-2xl flex flex-col items-center">
-                                <h4 class="text-(--neutral-0)">Wed</h4>
-                                <img src="./images/icon-drizzle.webp" alt="" class="w-20 h-20">
-                                <div class="flex flex-row gap-6">
-                                    <p class="deg text-(--neutral-0)">64<sup>o</sup></p>
-                                    <p class="fer text-(--neutral-0)">57<sup>o</sup></p>
-                                </div>
-                            </div>
-                            <div class="thu px-2 py-4 bg-(--neutral-600) rounded-2xl flex flex-col items-center">
-                                <h4 class="text-(--neutral-0)">Thu</h4>
-                                <img src="./images/icon-sunny.webp" alt="" class="w-20 h-20">
-                                <div class="flex flex-row gap-6">
-                                    <p class="deg text-(--neutral-0)">64<sup>o</sup></p>
-                                    <p class="fer text-(--neutral-0)">57<sup>o</sup></p>
-                                </div>
-                            </div>
-                            <div class="fri px-2 py-4 bg-(--neutral-600) rounded-2xl flex flex-col items-center">
-                                <h4 class="text-(--neutral-0)">Fri</h4>
-                                <img src="./images/icon-partly-cloudy.webp" alt="" class="w-20 h-20">
-                                <div class="flex flex-row gap-6">
-                                    <p class="deg text-(--neutral-0)">64<sup>o</sup></p>
-                                    <p class="fer text-(--neutral-0)">57<sup>o</sup></p>
-                                </div>
-                            </div>
-                            <div class="sat px-2 py-4 bg-(--neutral-600) rounded-2xl flex flex-col items-center">
-                                <h4 class="text-(--neutral-0)">Sat</h4>
-                                <img src="./images/icon-storm.webp" alt="" class="w-20 h-20">
-                                <div class="flex flex-row gap-6">
-                                    <p class="deg text-(--neutral-0)">64<sup>o</sup></p>
-                                    <p class="fer text-(--neutral-0)">57<sup>o</sup></p>
-                                </div>
-                            </div>
-                            <div class="sun px-2 py-4 bg-(--neutral-600) rounded-2xl flex flex-col items-center">
-                                <h4 class="text-(--neutral-0)">Sun</h4>
-                                <img src="./images/icon-snow.webp" alt="" class="w-20 h-20">
-                                <div class="flex flex-row gap-6">
-                                    <p class="deg text-(--neutral-0)">64<sup>o</sup></p>
-                                    <p class="fer text-(--neutral-0)">57<sup>o</sup></p>
-                                </div>
-                            </div>
-                            <div class="mon px-2 py-4 bg-(--neutral-600) rounded-2xl flex flex-col items-center">
-                                <h4 class="text-(--neutral-0)">Mon</h4>
-                                <img src="./images/icon-fog.webp" alt="" class="w-20 h-20">
-                                <div class="flex flex-row gap-6">
-                                    <p class="deg text-(--neutral-0)">64<sup>o</sup></p>
-                                    <p class="fer text-(--neutral-0)">57<sup>o</sup></p>
-                                </div>
-                            </div> -->
                         </div>
 
                     </div>
@@ -177,31 +131,8 @@
                         </div>
 
                     </div>
-                    <div id="hours" class="flex md:flex-col gap-4">
-                        <!-- <div
-                            class="bg-(--neutral-700) flex flex-row items-center justify-between w-full px-2 rounded-2xl">
-                            <div class=" flex flex-row items-center justify-between">
-                                <img src="./images/icon-weather/icon-drizzle.webp" alt="" class="w-10 h-10">
-                                <p id="time" class="text-(--neutral-0)">3 pm</p>
-                            </div>
-                            <p id="hour-temp" class="px-2 text-(--neutral-0)">20 deg</p>
-                        </div> -->
-                        <!-- <div
-                            class="bg-(--neutral-700) flex flex-row items-center justify-between w-full px-2 rounded-2xl">
-                            <div class=" flex flex-row items-center justify-between">
-                                <img src="./images/icon-weather/icon-drizzle.webp" alt="" class="w-10 h-10">
-                                <p id="time" class="text-(--neutral-0)">3 pm</p>
-                            </div>
-                            <p id="hour-temp" class="px-2 text-(--neutral-0)">20 deg</p>
-                        </div>
-                        <div
-                            class="bg-(--neutral-700) flex flex-row items-center justify-between w-full px-2 rounded-2xl">
-                            <div class=" flex flex-row items-center justify-between">
-                                <img src="./images/icon-weather/icon-drizzle.webp" alt="" class="w-10 h-10">
-                                <p id="time" class="text-(--neutral-0)">3 pm</p>
-                            </div>
-                            <p id="hour-temp" class="px-2 text-(--neutral-0)">20 deg</p>
-                        </div> -->
+                    <div id="hours" class="flex flex-col  gap-4">
+
                     </div>
 
                 </div>
@@ -215,3 +146,6 @@
 </body>
 
 </html>
+
+
+<!-- https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&daily=weather_code,temperature_2m_max,temperature_2m_min,sunset,sunrise,wind_speed_10m_max,apparent_temperature_min,apparent_temperature_max,wind_gusts_10m_max,precipitation_sum,precipitation_hours,precipitation_probability_max&hourly=temperature_2m,weather_code,pressure_msl,relative_humidity_2m,dew_point_2m,apparent_temperature,precipitation_probability,precipitation,rain,wind_speed_10m,wind_speed_80m,wind_speed_120m,wind_speed_180m,wind_direction_10m,wind_direction_80m,wind_direction_120m,wind_direction_180m,surface_pressure,cloud_cover_low,cloud_cover,cloud_cover_high,cloud_cover_mid&current=wind_gusts_10m,wind_direction_10m,wind_speed_10m,is_day,apparent_temperature,relative_humidity_2m,temperature_2m,precipitation,rain,showers,snowfall,surface_pressure,pressure_msl,cloud_cover,weather_code&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch -->

@@ -11,11 +11,20 @@ const dayOrNight = document.querySelector("#day-or-night");
 const dailyForeCast = document.querySelector("#forecast-days");
 const infoBenner = document.querySelector("#info-benner");
 const dayNamesSelect = document.querySelector("#day-names-select");
-const btn = document.getElementById("dayBtn");
-const menu = document.getElementById("dayMenu");
+const btn = document.querySelector("#dayBtn");
+const menu = document.querySelector("#dayMenu");
 const hourlyForeCase = document.querySelector("#hours");
+const unitsSelection = document.querySelector("#units-selection");
+const unitsPopup = document.querySelector("#units-popup");
+const tempUnitSelector = document.querySelector("#temp-unit-selector");
+const windUnitSelector = document.querySelector("#wind-unit-selector");
+const precUnitSelector = document.querySelector("#prec-unit-selector");
 
-// infoBenner.innerHTML = `<div class="flex items-center justify-center bg-(--neutral-600) h-60 rounded-2xl"><img src="./images/icon-ui/icon-loading.svg" alt="" class="loading-rotate w-5 h-5 ">`;
+unitsPopup.classList.add("hidden");
+unitsSelection.addEventListener("click", (e) => {
+  e.stopPropagation();
+  unitsPopup.classList.toggle("hidden");
+});
 
 const days = [
   "Sunday",
@@ -81,7 +90,7 @@ const getLocation = async () => {
 };
 getLocation();
 let globalData;
-
+let globaGeolData;
 function hourlyShimmer() {}
 
 async function getWeather(exectLocation) {
@@ -90,21 +99,45 @@ async function getWeather(exectLocation) {
   );
   const geoData = await geoRes.json();
   console.log(geoData);
+  globaGeolData = geoData;
   const { latitude, longitude } = geoData.results[0];
 
   const weatherRes = await fetch(
-    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_max,precipitation_sum,precipitation_hours,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,wind_gusts_10m_max,wind_speed_10m_max,daylight_duration,sunshine_duration,precipitation_probability_max&hourly=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m,apparent_temperature,precipitation_probability&current=wind_gusts_10m,wind_direction_10m,wind_speed_10m,is_day,relative_humidity_2m,apparent_temperature,temperature_2m,precipitation,rain,showers,snowfall,surface_pressure,cloud_cover,pressure_msl,weather_code&timezone=auto`
+    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_max,precipitation_sum,precipitation_hours,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,wind_gusts_10m_max,wind_speed_10m_max,daylight_duration,sunshine_duration,precipitation_probability_max&hourly=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m,apparent_temperature,precipitation_probability&current=wind_gusts_10m,wind_direction_10m,wind_speed_10m,is_day,relative_humidity_2m,apparent_temperature,temperature_2m,precipitation,rain,showers,snowfall,surface_pressure,cloud_cover,pressure_msl,weather_code&timezone=auto&`
   );
   const weatherData = await weatherRes.json();
   globalData = weatherData;
-  renderWeather(geoData, weatherData);
+  renderWeather(geoData, globalData);
 }
 const date = new Date();
 const dayName = days[date.getDay()];
 const monthName = months[date.getMonth()];
 const year = date.getFullYear();
 const hourIndex = date.getHours();
-console.log(hourIndex);
+let globelDayFromToday;
+let windUnit = "k";
+let tempUnit = "celcius";
+let precipitationUnit = "inches";
+
+tempUnitSelector.addEventListener("click", (e) => {
+  if (e.target.tagName === "H3") return;
+  tempUnit = e.target.id;
+  renderToday(globaGeolData, globalData, tempUnit, windUnit, precipitationUnit);
+  renderDailyForecast(globalData, tempUnit);
+  dayMenu(globelDayFromToday[0], tempUnit);
+});
+windUnitSelector.addEventListener("click", (e) => {
+  if (e.target.tagName === "H3") return;
+  windUnit = e.target.id;
+  renderToday(globaGeolData, globalData, tempUnit, windUnit, precipitationUnit);
+  renderDailyForecast(globalData, tempUnit);
+});
+precUnitSelector.addEventListener("click", (e) => {
+  if (e.target.tagName === "H3") return;
+  precipitationUnit = e.target.id;
+  renderToday(globaGeolData, globalData, tempUnit, windUnit, precipitationUnit);
+  renderDailyForecast(globalData, tempUnit);
+});
 
 function getDaysStartingFromToday(days) {
   const todayIndex = date.getDay();
@@ -114,13 +147,19 @@ function getDaysStartingFromToday(days) {
 
 function renderWeather(geoData, weatherData) {
   const dayFromToday = getDaysStartingFromToday(days);
-  renderToday(geoData, weatherData);
-  renderDailyForecast(weatherData);
-  dayMenu(dayFromToday[0]);
-  // renderHourlyForecast(weatherData);
+  globelDayFromToday = dayFromToday;
+  renderToday(geoData, weatherData, tempUnit, windUnit, precipitationUnit);
+  renderDailyForecast(weatherData, tempUnit);
+  dayMenu(dayFromToday[0], tempUnit);
 }
 
-function renderToday(geoData, weatherData) {
+function renderToday(
+  geoData,
+  weatherData,
+  tempUnit,
+  windUnit,
+  precipitationUnit
+) {
   infoBenner.innerHTML = "";
   infoBenner.innerHTML = `<div class="img-today flex flex-row items-center justify-between h-60 rounded-2xl p-6">
                             <div class="flex flex-col gap-4">
@@ -141,32 +180,85 @@ function renderToday(geoData, weatherData) {
                                     : "./images/moon.png"
                                 } id="day-or-night" alt="" class="w-20 h-20">
                                 <h2 id="temp-today" class="text-4xl md:text-6xl font-bold text-(--neutral-0)">${
-                                  weatherData.current.temperature_2m
+                                  tempUnit === "celcius"
+                                    ? weatherData.current.temperature_2m
+                                    : (weatherData.current.temperature_2m * 9) /
+                                        5 +
+                                      32
                                 }<sup>o</sup>
                                 </h2>
                             </div>
                         </div>`;
-  feelsLike.innerHTML = `${weatherData.current.apparent_temperature}<sup>o</sup>`;
+  feelsLike.innerHTML = `${
+    tempUnit === "celcius"
+      ? weatherData.current.apparent_temperature
+      : (weatherData.current.apparent_temperature * 9) / 5 + 32
+  }<sup>o</sup>`;
   humidity.innerHTML = `${weatherData.current.relative_humidity_2m}  %`;
-  windSpeed.innerHTML = `${weatherData.current.wind_speed_10m} <span class = "text-[16px]">kph</span>`;
-  precipitation.innerHTML = `${weatherData.current.precipitation} in`;
+  windSpeed.innerHTML = `${
+    windUnit === "k"
+      ? weatherData.current.wind_speed_10m
+      : Math.floor(weatherData.current.wind_speed_10m * 0.621371)
+  } <span class = "text-[16px]">${windUnit === "k" ? "kph" : "mph"}</span>`;
+  precipitation.innerHTML = `${
+    precipitationUnit === "inches"
+      ? weatherData.current.precipitation
+      : weatherData.current.precipitation * 25.4
+  } ${precipitationUnit === "inches" ? "in" : "mm"}`;
 }
 
-function renderDailyForecast(weatherData) {
+function getWeatherCode(foreCastOf, index) {
+  let weatherCode;
+  let weatherCodeImg;
+  let isDay = globalData.current.is_day;
+
+  if (foreCastOf === "daily") {
+    weatherCode = globalData.daily.weather_code;
+  } else if (foreCastOf === "hourly") {
+    weatherCode = globalData.hourly.weather_code;
+  }
+  // console.log(weatherCode);
+
+  if ([0].includes(weatherCode[index])) {
+    weatherCodeImg = `./images/icon-weather/clear-${
+      isDay === 1 ? "day" : "night"
+    }.svg`;
+  } else if ([1, 2, 3].includes(weatherCode[index])) {
+    weatherCodeImg = `./images/icon-weather/overcast-${
+      isDay === 1 ? "day" : "night"
+    }.svg`;
+  } else if ([45, 48].includes(weatherCode[index])) {
+    weatherCodeImg = "./images/icon-weather/fog-day.svg";
+  } else if ([51, 53, 55].includes(weatherCode[index])) {
+    weatherCodeImg = "./images/icon-weather/icon-sunny.webp";
+  } else if ([56, 57].includes(weatherCode[index])) {
+    weatherCodeImg = "./images/icon-weather/icon-sunny.webp";
+  } else if ([61, 63, 65].includes(weatherCode[index])) {
+    weatherCodeImg = "./images/icon-weather/icon-sunny.webp";
+  } else if ([66, 67].includes(weatherCode[index])) {
+    weatherCodeImg = "./images/icon-weather/icon-sunny.webp";
+  } else if ([71, 73, 75].includes(weatherCode[index])) {
+    weatherCodeImg = "./images/icon-weather/icon-sunny.webp";
+  } else if ([77].includes(weatherCode[index])) {
+    weatherCodeImg = "./images/icon-weather/icon-sunny.webp";
+  } else if ([80, 81, 82].includes(weatherCode[index])) {
+    weatherCodeImg = "./images/icon-weather/icon-sunny.webp";
+  } else if ([85, 86].includes(weatherCode[index])) {
+    weatherCodeImg = "./images/icon-weather/icon-sunny.webp";
+  } else if ([95].includes(weatherCode[index])) {
+    weatherCodeImg = "./images/icon-weather/icon-sunny.webp";
+  } else if ([96, 99].includes(weatherCode[index])) {
+    weatherCodeImg = "./images/icon-weather/icon-sunny.webp";
+  }
+  return weatherCodeImg;
+}
+
+function renderDailyForecast(weatherData, tempUnit) {
   console.log(weatherData);
   dailyForeCast.innerHTML = "";
   const dayFromToday = getDaysStartingFromToday(days);
-  // dayMenu(dayFromToday[0]);
   dayFromToday.forEach((el, index) => {
-    let weatherCode;
-    if ([0].includes(weatherData.daily.weather_code[index])) {
-      weatherCode = "./images/icon-weather/icon-sunny.webp";
-    } else if ([1, 2, 3].includes(weatherData.daily.weather_code[index])) {
-      weatherCode = "./images/icon-weather/icon-sunny.webp";
-    } else if ([45, 48].includes(weatherData.daily.weather_code[index])) {
-      weatherCode = "./images/icon-weather/icon-sunny.webp";
-    }
-
+    const weatherCodeImg = getWeatherCode("daily", index);
     const day = document.createElement("div");
     day.classList.add(
       "px-2",
@@ -181,27 +273,29 @@ function renderDailyForecast(weatherData) {
       0,
       3
     )}</h4>
-<img src=${weatherCode} alt="" class="w-20 h-20">
+<img src=${weatherCodeImg} alt="" class="w-20 h-20">
 <div class="flex flex-row gap-6">
 <p class="max-temp text-[12px] text-(--neutral-0)">${
-      weatherData.daily.temperature_2m_max[index]
+      tempUnit === "celcius"
+        ? weatherData.daily.temperature_2m_max[index]
+        : Math.floor((weatherData.daily.temperature_2m_max[index] * 9) / 5 + 32)
     }<sup>o</sup></p>
 <p class="min-temp text-[12px] text-(--neutral-0)">${
-      weatherData.daily.temperature_2m_min[index]
+      tempUnit === "celcius"
+        ? weatherData.daily.temperature_2m_min[index]
+        : Math.floor((weatherData.daily.temperature_2m_min[index] * 9) / 5 + 32)
     }<sup>o</sup></p>
 </div>`;
     dailyForeCast.append(day);
   });
 }
 
-function renderHourlyForecast(selectedDay, index) {
-  // console.log(selectedDay, index);
-
+function renderHourlyForecast(index, tempUnit) {
   hourlyForeCase.innerHTML = "";
   globalData.hourly.time
     .slice(hourIndex + index * 24, hourIndex + index * 24 + 8)
     .forEach((el, i) => {
-      // console.log(globalData.hourly.time[hourIndex + index * 24 + i]);
+      const weatherCodeImg = getWeatherCode("hourly", i);
       const hour = document.createElement("div");
       hour.classList.add(
         "bg-(--neutral-700)",
@@ -211,20 +305,32 @@ function renderHourlyForecast(selectedDay, index) {
         "justify-between",
         "w-full",
         "px-2",
+        "py-1",
         "rounded-2xl"
       );
       hour.innerHTML = `<div class=" flex flex-row items-center justify-between">
-                                <img src="./images/icon-weather/icon-drizzle.webp" alt="" class="w-10 h-10">
+                                <img src=${weatherCodeImg} alt="" class="w-10 h-10">
                                 <p id="time" class="text-(--neutral-0)">${
-                                  globalData.hourly.time[
-                                    hourIndex + index * 24 + i
-                                  ]
-                                }</p> 
+                                  hourIndex + i - 12 > 12
+                                    ? hourIndex + i - 12 - 12
+                                    : hourIndex + i - 12
+                                } : 00 ${
+        hourIndex + i - 12 < 12 ? "pm" : "am"
+      }</p> 
                             </div>
                             <p id="hour-temp" class="px-2 text-(--neutral-0)">${
-                              globalData.hourly.apparent_temperature[
-                                hourIndex + index * 24 + i
-                              ]
+                              tempUnit === "celcius"
+                                ? globalData.hourly.apparent_temperature[
+                                    hourIndex + index * 24 + i
+                                  ]
+                                : Math.floor(
+                                    (globalData.hourly.apparent_temperature[
+                                      hourIndex + index * 24 + i
+                                    ] *
+                                      9) /
+                                      5 +
+                                      32
+                                  )
                             } deg</p>`;
       hourlyForeCase.append(hour);
     });
@@ -240,7 +346,7 @@ function rotateDays(days, selectedDay) {
 
 function dayMenu(selectedDay) {
   const { orderedDays, index } = rotateDays(days, selectedDay);
-  renderHourlyForecast(orderedDays[0], index);
+  renderHourlyForecast(index, tempUnit);
   btn.innerHTML = `${orderedDays[0]} <span>▼</span>`;
   menu.innerHTML = "";
 
@@ -263,6 +369,9 @@ menu.addEventListener("click", (e) => {
   menu.classList.add("hidden");
 });
 searchBtn.addEventListener("click", function (e) {
+  if (!searchBox.value.toLowerCase()) {
+    return alert("please enter a city name");
+  }
   getWeather(searchBox.value.toLowerCase());
   searchBox.value = "";
 });
